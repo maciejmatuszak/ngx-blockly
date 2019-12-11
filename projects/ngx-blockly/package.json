@@ -1,6 +1,6 @@
 {
   "name": "ngx-blockly",
-  "version": "0.0.45",
+  "version": "1.0.0-RC1",
   "description": "An angular wrapper for google's blockly.",
   "repository": {
     "type": "git",
@@ -20,11 +20,11 @@
     "@angular/core": "7.x || 8.x"
   },
   "dependencies": {
+    "blockly": "3.20191014.4"
   },
   "scripts": {
     "build_lib": "ng build NgxBlockly",
-    "copy_script": "cp -r src/scripts ../../dist/ngx-blockly",
     "publish_lib": "cd ../../dist/ngx-blockly && npm publish",
-    "publish": "npm run build_lib  && npm run copy_script && npm run publish_lib"
+    "publish": "npm run build_lib  && npm run publish_lib"
   }
 }

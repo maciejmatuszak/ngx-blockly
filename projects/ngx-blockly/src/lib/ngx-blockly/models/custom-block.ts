@@ -1,8 +1,6 @@
 import { BlockMutator } from './block-mutator';
 import { Block } from './block';
 
-declare var Blockly: any;
-
 export abstract class CustomBlock extends Block {
 
     private _block: any;

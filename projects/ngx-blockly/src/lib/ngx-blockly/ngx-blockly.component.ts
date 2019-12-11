@@ -1,9 +1,15 @@
 import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
-import { NgxBlocklyConfig } from './ngx-blockly.config';
 import { NgxBlocklyGeneratorConfig } from './ngx-blockly-generator.config';
 import { CustomBlock } from './models/custom-block';
+import * as Blockly from 'blockly/core';
+import 'blockly/blocks';
+import 'blockly/php';
+import 'blockly/python';
+import 'blockly/javascript';
+import 'blockly/lua';
+import 'blockly/dart';
+import { BlocklyOptions } from 'blockly';
 
-declare var Blockly: any;
 
 @Component({
     selector: 'ngx-blockly',
@@ -12,7 +18,7 @@ declare var Blockly: any;
 })
 export class NgxBlocklyComponent implements OnInit, AfterViewInit {
 
-    @Input() public config: NgxBlocklyConfig = {};
+    @Input() public config: BlocklyOptions = {};
     @Input() public generatorConfig: NgxBlocklyGeneratorConfig = {};
     @Input() public customBlocks: CustomBlock[] = [];
     @Output() public workspaceChange: EventEmitter<any> = new EventEmitter<any>();
@@ -82,7 +88,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit() {
         if (!this.workspace) {
-            this.workspace = Blockly.inject('blockly', this.config);
+            this.workspace = Blockly.inject('blockly', this.config as Blockly.BlocklyOptions);
             this.workspace.addChangeListener(($event) => {
                 this.onWorkspaceChange($event);
             });
@@ -97,7 +103,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit {
 
     public workspaceToCode(workspaceId: string) {
         if (this.generatorConfig.dart) {
-           this.dartCode.emit(Blockly.Dart.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
+            this.dartCode.emit(Blockly.Dart.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
         }
         if (this.generatorConfig.javascript) {
             this.javascriptCode.emit(Blockly.JavaScript.workspaceToCode(Blockly.Workspace.getById(workspaceId)));

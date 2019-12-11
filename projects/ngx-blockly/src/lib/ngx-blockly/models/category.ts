@@ -9,13 +9,11 @@ export class Category implements Node {
     private _custom: string;
     private _style: string;
 
-    constructor(
-        blocks: Block[],
-        colour: string,
-        name: string,
-        custom: string,
-        style?: string
-    ) {
+    constructor(blocks: Block[],
+                colour: string,
+                name: string,
+                custom: string,
+                style?: string) {
         this._blocks = blocks;
         this._colour = colour;
         this._name = name;
