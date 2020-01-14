@@ -1,1 +1,7 @@
-<ngx-blockly [config]="config" [generatorConfig]="generatorConfig" [customBlocks]="customBlocks" (pythonCode)="onCode($event)" (workspaceChange)="onWorkspaceChange($event)"></ngx-blockly>
+<nav mat-tab-nav-bar>
+    <a mat-tab-link *ngFor="let link of links"
+       (click)="activeLink = link"
+       [active]="activeLink == link"> {{link}} </a>
+    <a mat-tab-link disabled>Disabled Link</a>
+</nav>
+<router-outlet></router-outlet>

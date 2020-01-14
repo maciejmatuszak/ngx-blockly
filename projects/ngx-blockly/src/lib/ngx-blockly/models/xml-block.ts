@@ -37,12 +37,29 @@ export class XmlBlock extends Block {
     }
 }
 
+export class XmlShadowBlock extends XmlBlock {
+
+    constructor(type: string) {
+        super(type);
+    }
+
+    public toXML(): string {
+        let xml = `<shadow type="${this.type}">`;
+
+        for (const value of this.values) {
+            xml += value.toXML();
+        }
+        xml += this.field ? this.field.toXML() : '';
+        xml += '</shadow>';
+        return xml;
+    }
+}
 export class Value {
     private _name: string;
-    private _shadow: XmlBlock;
+    private _shadow: XmlShadowBlock;
     private _block: XmlBlock;
 
-    constructor(name: string, shadow: XmlBlock, block: XmlBlock) {
+    constructor(name: string, shadow: XmlShadowBlock, block: XmlBlock) {
         this._name = name;
         this._shadow = shadow;
         this._block = block;
@@ -74,8 +91,8 @@ export class Value {
 
     public toXML(): string {
         return `<value name="${this.name}">` +
-        this.block ? this.block.toXML() : '' +
-        this.shadow ? this.shadow.toXML() : '' +
+            (this.block ? this.block.toXML() : '') +
+            (this.shadow ? this.shadow.toXML() : '') +
             '</value>';
     }
 }
