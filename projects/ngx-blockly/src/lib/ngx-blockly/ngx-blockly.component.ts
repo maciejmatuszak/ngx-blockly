@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import { NgxBlocklyConfig } from './ngx-blockly.config';
 import { NgxBlocklyGeneratorConfig } from './ngx-blockly-generator.config';
 import { CustomBlock } from './models/custom-block';
 import * as Blockly from 'blockly/core';
@@ -8,7 +9,7 @@ import 'blockly/python';
 import 'blockly/javascript';
 import 'blockly/lua';
 import 'blockly/dart';
-import { BlocklyOptions } from 'blockly';
+import { Workspace } from 'blockly';
 
 
 @Component({
@@ -18,7 +19,7 @@ import { BlocklyOptions } from 'blockly';
 })
 export class NgxBlocklyComponent implements OnInit, AfterViewInit {
 
-    @Input() public config: BlocklyOptions = {};
+    @Input() public config: NgxBlocklyConfig = {};
     @Input() public generatorConfig: NgxBlocklyGeneratorConfig = {};
     @Input() public customBlocks: CustomBlock[] = [];
     @Output() public workspaceChange: EventEmitter<any> = new EventEmitter<any>();
@@ -29,7 +30,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit {
     @Output() public pythonCode: EventEmitter<string> = new EventEmitter<string>();
     @Output() public xmlCode: EventEmitter<string> = new EventEmitter<string>();
 
-    public workspace: any;
+    public workspace: Workspace;
 
     constructor() {
     }
@@ -73,14 +74,33 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit {
                     };
                 }
                 if (customBlock.blockMutator) {
-                    Blockly.Extensions.registerMutator(customBlock.blockMutator.name, {
+                    const mutator_mixin: any = {
                         mutationToDom: function () {
-                            return this.blockInstance.blockMutator.mutationToDom();
+                            return customBlock.blockMutator.mutationToDom.call(customBlock.blockMutator, this);
                         },
                         domToMutation: function (xmlElement: any) {
-                            this.blockInstance.blockMutator.domToMutation(xmlElement);
+                            customBlock.blockMutator.domToMutation.call(customBlock.blockMutator, this, xmlElement);
                         }
-                    });
+                    };
+                    if (customBlock.blockMutator.blockList && customBlock.blockMutator.blockList.length > 0) {
+                        mutator_mixin.decompose = function (workspace: any) {
+                            return customBlock.blockMutator.decompose.call(customBlock.blockMutator, this, workspace);
+                        };
+                        mutator_mixin.compose = function (topBlock: any) {
+                            customBlock.blockMutator.compose.call(customBlock.blockMutator, this, topBlock);
+                        };
+                        mutator_mixin.saveConnections = function (containerBlock: any) {
+                            customBlock.blockMutator.saveConnections.call(customBlock.blockMutator, this, containerBlock);
+                        };
+                    }
+                    Blockly.Extensions.registerMutator(
+                        customBlock.blockMutator.name,
+                        mutator_mixin,
+                        function () {
+                            customBlock.blockMutator.afterBlockInit.call(customBlock.blockMutator, this);
+                        },
+                        customBlock.blockMutator.blockList
+                    );
                 }
             }
         }

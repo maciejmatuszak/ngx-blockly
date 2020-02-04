@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NgxToolboxBuilderService } from '../../projects/ngx-blockly/src/lib/ngx-blockly/services/ngx-toolbox-builder.service';
+import { NgxBlocklyConfig } from '../../projects/ngx-blockly/src/lib/ngx-blockly/ngx-blockly.config';
 
 export interface Link {
     name: string;
@@ -22,21 +23,21 @@ export class AppComponent {
 
     // @ViewChild(NgxBlocklyComponent, null) workspace;
     //
-    // public config: BlocklyOptions = {
-    //     toolbox: '<xml id="toolbox" style="display: none">' +
-    //         '<block type="controls_if"></block>' +
-    //         '<block type="controls_repeat_ext"></block>' +
-    //         '<block type="logic_compare"></block>' +
-    //         '<block type="math_number"></block>' +
-    //         '<block type="math_arithmetic"></block>' +
-    //         '<block type="text"></block>' +
-    //         '<block type="text_print"></block>' +
-    //         '</xml>',
-    //     move: {
-    //         scrollbars: true
-    //     },
-    //     trashcan: true
-    // };
+    public config: NgxBlocklyConfig = {
+        toolbox: '<xml id="toolbox" style="display: none">' +
+            '<block type="controls_if"></block>' +
+            '<block type="controls_repeat_ext"></block>' +
+            '<block type="logic_compare"></block>' +
+            '<block type="math_number"></block>' +
+            '<block type="math_arithmetic"></block>' +
+            '<block type="text"></block>' +
+            '<block type="text_print"></block>' +
+            '</xml>',
+        move: {
+            scrollbars: true
+        },
+        trashcan: true
+    };
     //
     // public generatorConfig: NgxBlocklyGeneratorConfig = {
     //     dart: false,

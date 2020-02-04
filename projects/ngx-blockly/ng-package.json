@@ -2,7 +2,10 @@
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/ngx-blockly",
   "lib": {
-    "entryFile": "src/public_api.ts"
+    "entryFile": "src/public_api.ts",
+    "umdModuleIds": {
+      "blockly/core": "blockly/core"
+    }
   },
   "whitelistedNonPeerDependencies": [
     "blockly"
