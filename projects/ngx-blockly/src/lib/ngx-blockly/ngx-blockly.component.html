@@ -1,3 +1,3 @@
-<div id="blockly-wrapper" class="blockly-wrapper">
-    <div id="blockly" class="blockly"></div>
+<!--extra element is needed to bind 'resized' event, was unable to bind it to host-->
+<div id="blocklyDiv" style="height: 100%; width: 100%" (resized)="onResized($event)">
 </div>
